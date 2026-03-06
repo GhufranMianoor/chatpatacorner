@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu – Chatpata Corner</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#E8560A">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --or: #E8560A;
+      --dor: #C4430A;
+      --dark: #1A1008;
+      --lb: #8B6343;
+      --w: #fff;
+      --bg: #f4ede0;
+      --card: #fff;
+      --brd: #e5ddd0;
+      --mid: #3D2B1A;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--dark);
+      height: 62px;
+      padding: 0 clamp(14px, 4vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--or);
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      color: var(--w);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--or);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-home {
+      font-family: 'Oswald', sans-serif;
+      font-size: .8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #888;
+      text-decoration: none;
+      transition: color .2s;
+      white-space: nowrap;
+    }
+
+    .nav-home:hover {
+      color: var(--or);
+    }
+
+    .cart-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--or);
+      color: var(--w);
+      font-family: 'Oswald', sans-serif;
+      font-size: .82rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 9px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background .2s;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cart-btn:hover {
+      background: var(--dor);
+    }
+
+    .cart-btn-badge {
+      background: rgba(0, 0, 0, .25);
+      color: var(--w);
+      font-size: .72rem;
+      font-weight: 700;
+      min-width: 22px;
+      height: 22px;
+      border-radius: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* PAGE */
+    .page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px clamp(14px, 4vw, 40px) 120px;
+    }
+
+    /* SEARCH */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--lb);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 14px 12px 44px;
+      background: var(--card);
+      border: 2px solid var(--brd);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: .95rem;
+      color: var(--dark);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--or);
+    }
+
+    .search-input::placeholder {
+      color: #bbb;
+    }
+
+    /* CATEGORY PILLS */
+    .cat-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      margin-bottom: 28px;
+      scrollbar-width: none;
+    }
+
+    .cat-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cpill {
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-family: 'Oswald', sans-serif;
+      font-size: .76rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      background: var(--card);
+      color: var(--mid);
+      border: 2px solid var(--brd);
+      transition: all .18s;
+    }
+
+    .cpill.active,
+    .cpill:hover {
+      background: var(--or);
+      color: var(--w);
+      border-color: var(--or);
+    }
+
+    /* SECTION */
+    .sec {
+      margin-bottom: 40px;
+    }
+
+    .sec-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--dark);
+      border-bottom: 2px solid var(--brd);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .sec-count {
+      font-family: 'Oswald', sans-serif;
+      font-size: .8rem;
+      color: var(--lb);
+      letter-spacing: 1px;
+      font-weight: 400;
+    }
+
+    /* ITEM ROW */
+    .item-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border: 2px solid var(--brd);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .item-row:hover {
+      border-color: rgba(232, 86, 10, .35);
+      box-shadow: 0 3px 14px rgba(232, 86, 10, .1);
+    }
+
+    /* thumbnail placeholder */
+    .item-thumb {
+      width: 68px;
+      height: 68px;
+      flex-shrink: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f5ebe0, #ede0d0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--brd);
+    }
+
+    .item-thumb svg {
+      width: 28px;
+      height: 28px;
+      opacity: .25;
+    }
+
+    .item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: .92rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--dark);
+      line-height: 1.2;
+    }
+
+    .item-sub {
+      font-size: .73rem;
+      color: var(--lb);
+      margin-top: 3px;
+    }
+
+    .item-price {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.3rem;
+      color: var(--or);
+      margin-top: 4px;
+    }
+
+    /* ADD / QTY */
+    .item-action {
+      flex-shrink: 0;
+    }
+
+    .add-btn {
+      background: var(--or);
+      color: var(--w);
+      border: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: .8rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .15s, transform .1s;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover {
+      background: var(--dor);
+    }
+
+    .add-btn:active {
+      transform: scale(.95);
+    }
+
+    .qty-box {
+      display: flex;
+      align-items: center;
+      border: 2px solid var(--or);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--card);
+    }
+
+    .q-btn {
+      width: 36px;
+      height: 38px;
+      border: none;
+      background: none;
+      color: var(--or);
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .q-btn:hover {
+      background: rgba(232, 86, 10, .1);
+    }
+
+    .q-val {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.15rem;
+      color: var(--dark);
+      min-width: 34px;
+      text-align: center;
+      line-height: 38px;
+    }
+
+    /* NO RESULTS */
+    .no-res {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .no-res p {
+      font-family: 'Oswald', sans-serif;
+      font-size: .85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #bbb;
+    }
+
+    /* FLOATING CART BAR — mobile */
+    .float-bar {
+      display: none;
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      z-index: 400;
+      background: var(--or);
+      color: var(--w);
+      border-radius: 14px;
+      padding: 14px 20px;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(232, 86, 10, .5);
+      align-items: center;
+      justify-content: space-between;
+      transition: background .2s, transform .2s;
+    }
+
+    .float-bar.show {
+      display: flex;
+    }
+
+    .float-bar:hover {
+      background: var(--dor);
+      transform: translateY(-2px);
+    }
+
+    .float-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Oswald', sans-serif;
+      font-size: .9rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .float-bar-badge {
+      background: rgba(0, 0, 0, .25);
+      color: var(--w);
+      min-width: 24px;
+      height: 24px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .float-bar-price {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      z-index: 9999;
+      background: var(--dark);
+      border: 2px solid var(--or);
+      color: var(--w);
+      font-family: 'Oswald', sans-serif;
+      font-size: .82rem;
+      letter-spacing: 1px;
+      padding: 10px 22px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: all .25s;
+      pointer-events: none;
+      white-space: nowrap;
+      max-width: calc(100vw - 40px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .nav-home {
+        display: none;
+      }
+
+      .page {
+        padding-bottom: 140px;
+      }
+
+      .item-row {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .item-thumb {
+        width: 58px;
+        height: 58px;
+      }
+
+      .item-name {
+        font-size: .85rem;
+      }
+
+      .add-btn {
+        padding: 9px 16px;
+        font-size: .76rem;
+      }
+
+      .float-bar.show {
+        display: flex;
+      }
+
+      .cart-btn {
+        display: none;
+      }
+
+      /* replaced by float bar on mobile */
+    }
+
+    @media (min-width: 601px) {
+      .float-bar {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">Chatpata <span>Corner</span></a>
+    <div class="nav-right">
+      <a href="index.html" class="nav-home">&#8592; Home</a>
+      <a href="cart.html" class="cart-btn" id="navCartBtn">
+        View Cart
+        <span class="cart-btn-badge" id="navCount">0</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search menu items..." autocomplete="off">
+    </div>
+
+    <!-- Category pills -->
+    <div class="cat-row" id="catRow">
+      <button class="cpill active" data-cat="all">All Items</button>
+      <button class="cpill" data-cat="main">Main Menu</button>
+      <button class="cpill" data-cat="frozen">Frozen Items</button>
+      <button class="cpill" data-cat="noodles">Noodles &amp; Pasta</button>
+      <button class="cpill" data-cat="chatkhara">Chatkhara Special</button>
+      <button class="cpill" data-cat="desserts">Desserts</button>
+      <button class="cpill" data-cat="bread">Bread</button>
+    </div>
+
+    <!-- Sections rendered by JS -->
+    <div id="sections"></div>
+    <div class="no-res" id="noRes">
+      <p>No items found</p>
+    </div>
+
+  </div>
+
+  <!-- Floating cart bar (mobile) -->
+  <a href="cart.html" class="float-bar" id="floatBar">
+    <div class="float-bar-left">
+      <span class="float-bar-badge" id="floatCount">0</span>
+      View Cart
+    </div>
+    <span class="float-bar-price" id="floatPrice">Rs 0</span>
+  </a>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ────────────────────────────────
+       CART STORE  (localStorage)
+    ──────────────────────────────── */
+    const CS = {
+      KEY: 'cc_cart',
+      get() { try { return JSON.parse(localStorage.getItem(this.KEY)) || {}; } catch { return {}; } },
+      save(c) { try { localStorage.setItem(this.KEY, JSON.stringify(c)); } catch { } },
+      add(id, name, price, note) {
+        const c = this.get();
+        if (c[id]) c[id].qty++;
+        else c[id] = { id, name, price, note: note || '', qty: 1 };
+        this.save(c); return c;
+      },
+      dec(id) {
+        const c = this.get();
+        if (!c[id]) return c;
+        c[id].qty--;
+        if (c[id].qty <= 0) delete c[id];
+        this.save(c); return c;
+      },
+      count() { return Object.values(this.get()).reduce((s, i) => s + i.qty, 0); },
+      subtotal() { return Object.values(this.get()).reduce((s, i) => s + i.price * i.qty, 0); }
+    };
+
+    /* ────────────────────────────────
+       MENU DATA
+    ──────────────────────────────── */
+    const MENU = {
+      main: {
+        label: 'Main Menu', items: [
+          { n: 'Chicken Biryani', p: 1400, note: 'Per Kg' },
+          { n: 'Beef Biryani', p: 1600, note: 'Per Kg' },
+          { n: 'White Biryani', p: 1200, note: 'Per Kg' },
+          { n: 'Chicken Pulao', p: 1200, note: 'Per Kg' },
+          { n: 'Beef Akani', p: 1350, note: 'Per Kg' },
+          { n: 'Chicken Akani', p: 1200, note: 'Per Kg' },
+          { n: 'Beef Nihari', p: 1500, note: 'Per Kg' },
+          { n: 'Aloo Keema', p: 1250, note: 'Per Kg' },
+          { n: 'Achari Keema', p: 1400, note: 'Per Kg' },
+          { n: 'Karhai Keema', p: 1400, note: 'Per Kg' },
+          { n: 'Hara Bhara Keema', p: 1300, note: 'Per Kg' },
+          { n: 'Chicken Karahi', p: 1300, note: 'Per Kg' },
+          { n: 'Mutton Karahi', p: 1700, note: 'Per Kg' },
+          { n: 'Beef Karahi', p: 1400, note: 'Per Kg' },
+          { n: 'Beef Korma', p: 1450, note: 'Per Kg' },
+          { n: 'Chicken Korma', p: 1300, note: 'Per Kg' },
+          { n: 'Chicken White Korma', p: 1300, note: 'Per Kg' },
+          { n: 'Chicken Handi Special', p: 1400, note: 'Per Kg' },
+          { n: 'Tandoori Chicken', p: 1200, note: 'Per Kg' },
+          { n: 'Chicken Ginger', p: 1250, note: 'Per Kg' },
+          { n: 'Beef Koftey', p: 1200, note: 'Per Kg' },
+          { n: 'Curry Chicken', p: 1200, note: 'Per Kg' },
+          { n: 'Fry Seekh Keema', p: 1200, note: 'Per Kg' },
+          { n: 'Haleem', p: 750, note: 'Per Serving' },
+          { n: 'Chicken Malai Boti', p: 350, note: '500ml Box' },
+          { n: 'Seekh Kabab', p: 350, note: '4 Pieces' },
+          { n: 'Kabab Masala', p: 500, note: 'Single Serving' },
+          { n: 'Okhai Daal Chawal', p: 250, note: 'Single Serving' },
+          { n: 'Aloo Muttar Pulao', p: 250, note: 'Single Serving' },
+        ]
+      },
+      frozen: {
+        label: 'Frozen Items', items: [
+          { n: 'Beef Chapli Kabab', p: 600, note: '6 Pieces' },
+          { n: 'Chicken Patty', p: 680, note: '6 Pieces' },
+          { n: 'Chicken Hot Sticks', p: 550, note: '6 Pieces' },
+          { n: 'Chicken Triangle', p: 600, note: '6 Pieces' },
+          { n: 'Beef Shami Kabab', p: 750, note: '12 Pieces' },
+          { n: 'Chicken Shami Kabab', p: 670, note: '12 Pieces' },
+          { n: 'Chicken Stick Boti', p: 950, note: '12 Pieces' },
+          { n: 'Peri Bites', p: 750, note: '12 Pieces' },
+          { n: 'Beef Keema Samosa', p: 550, note: '12 Pieces' },
+          { n: 'Chicken Keema Samosa', p: 500, note: '12 Pieces' },
+          { n: 'Aloo Samosa', p: 320, note: '12 Pieces' },
+          { n: 'Mini Spring Rolls', p: 400, note: '12 Pieces' },
+          { n: 'Resha Kabab', p: 550, note: '12 Pieces' },
+          { n: 'Labnani Kabab', p: 600, note: '12 Pieces' },
+          { n: 'Chicken Cheese Balls', p: 730, note: '12 Pieces' },
+          { n: 'Chicken Cutlets', p: 580, note: '12 Pieces' },
+          { n: 'Beef Box Paties', p: 620, note: '12 Pieces' },
+          { n: 'Chicken Box Paties', p: 550, note: '12 Pieces' },
+          { n: 'Veg Box Paties', p: 420, note: '12 Pieces' },
+          { n: 'Beef Bread Rolls', p: 680, note: '12 Pieces' },
+          { n: 'Chicken Bread Rolls', p: 630, note: '12 Pieces' },
+          { n: 'Pizza Cones', p: 880, note: '12 Pieces' },
+          { n: 'Chicken Wonton', p: 420, note: '12 Pieces' },
+          { n: 'Potato Nuggets', p: 430, note: '12 Pieces' },
+          { n: 'Chicken Nuggets', p: 600, note: '12 Pieces' },
+          { n: 'Chicken Kentucky Fingers', p: 800, note: '12 Pieces' },
+        ]
+      },
+      noodles: {
+        label: 'Noodles & Pasta', items: [
+          { n: 'Memoni Kari Khausa', p: 450, note: 'Speciality · Single Serving' },
+          { n: 'Fry Khausa', p: 350, note: 'Single Serving' },
+          { n: 'Schezwan Noodles', p: 350, note: 'Single Serving' },
+          { n: 'Singaporean Rice', p: 500, note: 'Single Serving' },
+          { n: 'Chicken Macronies', p: 380, note: 'Single Serving' },
+          { n: 'Cheesy Pasta', p: 500, note: 'Single Serving' },
+        ]
+      },
+      chatkhara: {
+        label: 'Chatkhara Special', items: [
+          { n: 'Chatpattey Aloo', p: 550, note: 'Complimentary Papri' },
+          { n: 'Black Channa Papri', p: 750, note: 'Complimentary Papri' },
+          { n: 'Kari Choley', p: 700, note: 'Complimentary Papri' },
+          { n: 'Aloo Choley', p: 600, note: 'Complimentary Papri' },
+          { n: 'Kathiawari Choley', p: 600, note: 'Complimentary Papri' },
+        ]
+      },
+      desserts: {
+        label: 'Desserts', items: [
+          { n: 'Kheer', p: 950 },
+          { n: 'Fruit Cream', p: 850 },
+          { n: 'Cake Triffle', p: 1100 },
+          { n: 'Oreo Delight', p: 1000 },
+        ]
+      },
+      bread: {
+        label: 'Bread Speciality', items: [
+          { n: 'Street Style Bunkabab', p: 50 },
+          { n: 'Quesadilla Cheese', p: 350, note: '4 Pieces' },
+        ]
+      },
+    };
+
+    /* ────────────────────────────────
+       HELPERS
+    ──────────────────────────────── */
+    const PH = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="16" width="48" height="36" rx="4" stroke="#8B6343" stroke-width="2"/>
+  <circle cx="22" cy="28" r="5" stroke="#8B6343" stroke-width="2"/>
+  <path d="M8 40 L20 30 L30 40 L40 26 L56 40" stroke="#8B6343" stroke-width="2" stroke-linejoin="round" fill="none"/>
+</svg>`;
+
+    /* safe id from item name */
+    function makeId(name) { return 'item__' + name.replace(/[^a-zA-Z0-9]/g, '_'); }
+
+    /* ────────────────────────────────
+       BUILD MENU DOM
+    ──────────────────────────────── */
+    function buildMenu() {
+      const wrap = document.getElementById('sections');
+      wrap.innerHTML = '';
+      Object.entries(MENU).forEach(([catKey, cat]) => {
+        const sec = document.createElement('div');
+        sec.className = 'sec';
+        sec.dataset.cat = catKey;
+
+        sec.innerHTML = `<div class="sec-title">${cat.label} <span class="sec-count">${cat.items.length} items</span></div>`;
+
+        cat.items.forEach(item => {
+          const id = makeId(item.n);
+          const row = document.createElement('div');
+          row.className = 'item-row';
+          row.dataset.cat = catKey;
+          row.dataset.name = item.n.toLowerCase();
+          row.dataset.id = id;
+          row.innerHTML = `
+        <div class="item-thumb">${PH}</div>
+        <div class="item-info">
+          <div class="item-name">${item.n}</div>
+          ${item.note ? `<div class="item-sub">${item.note}</div>` : ''}
+          <div class="item-price">Rs ${item.p.toLocaleString()}</div>
+        </div>
+        <div class="item-action" id="ctrl_${id}"></div>`;
+          sec.appendChild(row);
+        });
+        wrap.appendChild(sec);
+      });
+      syncCtrls();
+    }
+
+    /* ────────────────────────────────
+       RENDER ONE ITEM CONTROL
+    ──────────────────────────────── */
+    function renderCtrl(id) {
+      const el = document.getElementById('ctrl_' + id);
+      if (!el) return;
+      const cart = CS.get();
+      const qty = cart[id] ? cart[id].qty : 0;
+
+      if (qty === 0) {
+        el.innerHTML = `<button class="add-btn" data-id="${id}">Add</button>`;
+        el.querySelector('.add-btn').addEventListener('click', function () {
+          // look up item
+          let found = null;
+          outer: for (const cat of Object.values(MENU)) {
+            for (const it of cat.items) {
+              if (makeId(it.n) === id) { found = it; break outer; }
+            }
+          }
+          if (!found) return;
+          CS.add(id, found.n, found.p, found.note || '');
+          renderCtrl(id);
+          refreshNav();
+          showToast(found.n + ' added to cart');
+        });
+      } else {
+        el.innerHTML = `
+      <div class="qty-box">
+        <button class="q-btn q-dec" data-id="${id}">&#8722;</button>
+        <span class="q-val">${qty}</span>
+        <button class="q-btn q-inc" data-id="${id}">&#43;</button>
+      </div>`;
+        el.querySelector('.q-dec').addEventListener('click', function () {
+          CS.dec(id); renderCtrl(id); refreshNav();
+        });
+        el.querySelector('.q-inc').addEventListener('click', function () {
+          const c = CS.get();
+          if (c[id]) { c[id].qty++; CS.save(c); }
+          renderCtrl(id); refreshNav();
+        });
+      }
+    }
+
+    /* sync all visible controls with cart state */
+    function syncCtrls() {
+      document.querySelectorAll('.item-row').forEach(row => renderCtrl(row.dataset.id));
+    }
+
+    /* ────────────────────────────────
+       FILTER  (category + search)
+    ──────────────────────────────── */
+    let activecat = 'all';
+
+    document.getElementById('catRow').addEventListener('click', function (e) {
+      const btn = e.target.closest('.cpill');
+      if (!btn) return;
+      document.querySelectorAll('.cpill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activecat = btn.dataset.cat;
+      applyFilter();
+    });
+
+    document.getElementById('searchInput').addEventListener('input', applyFilter);
+
+    function applyFilter() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+      let any = false;
+
+      document.querySelectorAll('.sec').forEach(sec => {
+        const catMatch = activecat === 'all' || sec.dataset.cat === activecat;
+        if (!catMatch) { sec.style.display = 'none'; return; }
+        sec.style.display = '';
+        let secAny = false;
+        sec.querySelectorAll('.item-row').forEach(row => {
+          const show = !q || row.dataset.name.includes(q);
+          row.style.display = show ? '' : 'none';
+          if (show) { any = true; secAny = true; }
+        });
+        if (!secAny) sec.style.display = 'none';
+      });
+      document.getElementById('noRes').style.display = any ? 'none' : 'block';
+    }
+
+    /* ────────────────────────────────
+       NAV / FLOAT BAR
+    ──────────────────────────────── */
+    function refreshNav() {
+      const count = CS.count();
+      const sub = CS.subtotal();
+      document.getElementById('navCount').textContent = count;
+      document.getElementById('floatCount').textContent = count;
+      document.getElementById('floatPrice').textContent = 'Rs ' + sub.toLocaleString();
+      const fb = document.getElementById('floatBar');
+      count > 0 ? fb.classList.add('show') : fb.classList.remove('show');
+    }
+
+    /* ────────────────────────────────
+       TOAST
+    ──────────────────────────────── */
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+    }
+
+    /* ────────────────────────────────
+       INIT
+    ──────────────────────────────── */
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => { });
+    buildMenu();
+    refreshNav();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart – Chatpata Corner</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E8560A">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --or: #E8560A;
+  --dor: #C4430A;
+  --dark: #1A1008;
+  --lb: #8B6343;
+  --w: #fff;
+  --bg: #f4ede0;
+  --card: #fff;
+  --brd: #e5ddd0;
+  --mid: #3D2B1A;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--dark); height: 62px;
+  padding: 0 clamp(14px, 4vw, 48px);
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 3px solid var(--or);
+}
+.logo { font-family: 'Bebas Neue', cursive; font-size: clamp(1.3rem, 3vw, 1.8rem); color: var(--w); letter-spacing: 2px; text-decoration: none; }
+.logo span { color: var(--or); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-back {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'Oswald', sans-serif; font-size: .82rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: #aaa; text-decoration: none; transition: color .2s; white-space: nowrap;
+}
+.nav-back:hover { color: var(--or); }
+
+/* PAGE */
+.page { max-width: 900px; margin: 0 auto; padding: 32px clamp(14px, 4vw, 40px) 60px; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 28px; }
+.page-title { font-family: 'Bebas Neue', cursive; font-size: clamp(2rem, 6vw, 3rem); letter-spacing: 3px; color: var(--dark); }
+.page-title span { color: var(--or); }
+.page-sub { font-family: 'Oswald', sans-serif; font-size: .8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--lb); margin-top: 4px; }
+
+/* TWO-COLUMN LAYOUT */
+.layout { display: grid; grid-template-columns: 1fr 360px; gap: 24px; align-items: start; }
+
+/* ────────────────── LEFT: CART ITEMS ────────────────── */
+.cart-section { background: var(--card); border-radius: 14px; border: 2px solid var(--brd); overflow: hidden; }
+.cart-section-head {
+  padding: 16px 20px; border-bottom: 2px solid var(--brd);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-section-title { font-family: 'Bebas Neue', cursive; font-size: 1.4rem; letter-spacing: 2px; color: var(--dark); }
+.cart-count-tag {
+  font-family: 'Oswald', sans-serif; font-size: .75rem; letter-spacing: 1.5px; text-transform: uppercase;
+  background: rgba(232,86,10,.1); color: var(--or); border: 1px solid rgba(232,86,10,.25);
+  padding: 4px 12px; border-radius: 20px;
+}
+.clear-link {
+  font-family: 'Oswald', sans-serif; font-size: .75rem; letter-spacing: 1px; text-transform: uppercase;
+  color: #ccc; background: none; border: none; cursor: pointer; transition: color .2s;
+}
+.clear-link:hover { color: #ef4444; }
+
+/* EMPTY STATE */
+.cart-empty {
+  padding: 60px 20px; text-align: center;
+}
+.cart-empty-icon { font-size: 3.5rem; margin-bottom: 14px; display: block; opacity: .3; }
+.cart-empty-title { font-family: 'Bebas Neue', cursive; font-size: 1.6rem; letter-spacing: 2px; color: #bbb; margin-bottom: 8px; }
+.cart-empty-sub { font-family: 'Oswald', sans-serif; font-size: .8rem; letter-spacing: 1.5px; text-transform: uppercase; color: #ccc; margin-bottom: 24px; }
+.btn-back-menu {
+  display: inline-block;
+  background: var(--or); color: var(--w);
+  font-family: 'Oswald', sans-serif; font-size: .85rem; letter-spacing: 2px; text-transform: uppercase;
+  padding: 12px 28px; border-radius: 8px; text-decoration: none;
+  transition: background .2s;
+}
+.btn-back-menu:hover { background: var(--dor); }
+
+/* CART ITEM ROW */
+.cart-items { padding: 0 20px; }
+.cart-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 0; border-bottom: 1px solid var(--brd);
+}
+.cart-item:last-child { border-bottom: none; }
+
+.ci-thumb {
+  width: 62px; height: 62px; flex-shrink: 0;
+  border-radius: 10px; overflow: hidden;
+  background: linear-gradient(135deg, #f5ebe0, #ede0d0);
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--brd);
+}
+.ci-thumb svg { width: 26px; height: 26px; opacity: .25; }
+.ci-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.ci-info { flex: 1; min-width: 0; }
+.ci-name { font-family: 'Oswald', sans-serif; font-size: .92rem; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; color: var(--dark); }
+.ci-sub  { font-size: .72rem; color: var(--lb); margin-top: 2px; }
+.ci-unit { font-size: .76rem; color: #aaa; margin-top: 4px; }
+
+.ci-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+.ci-total { font-family: 'Bebas Neue', cursive; font-size: 1.2rem; color: var(--dark); }
+
+/* QTY CONTROL */
+.qty-box {
+  display: flex; align-items: center;
+  border: 2px solid var(--brd); border-radius: 8px; overflow: hidden;
+  background: var(--card);
+}
+.q-btn {
+  width: 32px; height: 32px; border: none; background: none;
+  color: var(--or); font-size: 1rem; font-weight: 700; cursor: pointer;
+  transition: background .15s; display: flex; align-items: center; justify-content: center;
+}
+.q-btn:hover { background: rgba(232,86,10,.1); }
+.q-val {
+  font-family: 'Bebas Neue', cursive; font-size: 1.05rem; color: var(--dark);
+  min-width: 30px; text-align: center; line-height: 32px;
+}
+.remove-btn {
+  background: none; border: none; cursor: pointer;
+  color: #ccc; font-size: .85rem; transition: color .15s; padding: 2px;
+}
+.remove-btn:hover { color: #ef4444; }
+
+/* ADD MORE LINK */
+.add-more-row {
+  padding: 16px 20px; border-top: 2px solid var(--brd);
+}
+.add-more-link {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'Oswald', sans-serif; font-size: .8rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--or); text-decoration: none; transition: gap .2s;
+}
+.add-more-link:hover { gap: 10px; }
+
+/* ────────────────── RIGHT: ORDER SUMMARY ────────────────── */
+.summary-col { display: flex; flex-direction: column; gap: 16px; }
+
+/* Price summary card */
+.summary-card { background: var(--card); border: 2px solid var(--brd); border-radius: 14px; overflow: hidden; }
+.summary-head { padding: 14px 20px; border-bottom: 2px solid var(--brd); }
+.summary-head-title { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; letter-spacing: 2px; color: var(--dark); }
+
+.summary-rows { padding: 14px 20px; }
+.sum-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.sum-label { font-family: 'Oswald', sans-serif; font-size: .82rem; letter-spacing: 1px; text-transform: uppercase; color: #999; }
+.sum-val   { font-family: 'Oswald', sans-serif; font-size: .9rem; color: var(--dark); font-weight: 600; }
+.sum-divider { border: none; border-top: 2px solid var(--brd); margin: 10px 0; }
+.grand-row { display: flex; justify-content: space-between; align-items: center; }
+.grand-label { font-family: 'Bebas Neue', cursive; font-size: 1.2rem; letter-spacing: 2px; color: var(--dark); }
+.grand-val   { font-family: 'Bebas Neue', cursive; font-size: 1.6rem; color: var(--or); }
+
+/* Checkout form card */
+.checkout-card { background: var(--card); border: 2px solid var(--brd); border-radius: 14px; overflow: hidden; }
+.checkout-head { padding: 14px 20px; border-bottom: 2px solid var(--brd); background: var(--dark); }
+.checkout-head-title { font-family: 'Bebas Neue', cursive; font-size: 1.3rem; letter-spacing: 2px; color: var(--w); }
+.checkout-head-sub { font-family: 'Oswald', sans-serif; font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--lb); margin-top: 2px; }
+
+.checkout-form { padding: 18px 20px; }
+.fg { margin-bottom: 14px; }
+.fg label {
+  display: block; font-family: 'Oswald', sans-serif; font-size: .72rem;
+  letter-spacing: 2px; text-transform: uppercase; color: #999; margin-bottom: 6px;
+}
+.fg input, .fg select, .fg textarea {
+  width: 100%; padding: 11px 13px;
+  background: var(--bg); border: 2px solid var(--brd); border-radius: 8px;
+  font-family: 'Nunito', sans-serif; font-size: .9rem; color: var(--dark); outline: none;
+  transition: border-color .2s;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus { border-color: var(--or); background: var(--w); }
+.fg select { cursor: pointer; }
+.fg textarea { resize: vertical; min-height: 70px; }
+
+/* Order type pills */
+.type-pills { display: flex; gap: 8px; }
+.type-pill {
+  flex: 1; padding: 10px; text-align: center; border-radius: 8px; cursor: pointer;
+  font-family: 'Oswald', sans-serif; font-size: .8rem; letter-spacing: 1.5px; text-transform: uppercase;
+  border: 2px solid var(--brd); background: var(--bg); color: #999;
+  transition: all .18s; user-select: none;
+}
+.type-pill.selected { border-color: var(--or); background: rgba(232,86,10,.08); color: var(--or); }
+
+/* Place order btn */
+.place-btn {
+  width: 100%; padding: 16px; margin-top: 4px;
+  background: var(--or); border: none; color: var(--w);
+  font-family: 'Bebas Neue', cursive; font-size: 1.2rem; letter-spacing: 3px;
+  border-radius: 10px; cursor: pointer;
+  transition: background .2s, transform .1s;
+}
+.place-btn:hover { background: var(--dor); }
+.place-btn:active { transform: scale(.98); }
+.place-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+/* ── SUCCESS MODAL ── */
+.modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.75); z-index: 9000;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.modal-bg.show { display: flex; }
+.modal-box {
+  background: var(--dark); border: 2px solid var(--or); border-radius: 18px;
+  padding: clamp(28px, 6vw, 48px) clamp(20px, 5vw, 40px);
+  text-align: center; max-width: 440px; width: 100%;
+  animation: popIn .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn { from { transform: scale(.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-icon  { font-size: 3.5rem; display: block; margin-bottom: 14px; }
+.modal-title { font-family: 'Bebas Neue', cursive; font-size: clamp(2rem,5vw,2.6rem); color: var(--w); letter-spacing: 3px; margin-bottom: 10px; }
+.modal-id    { background: rgba(232,86,10,.15); border: 1px solid var(--or); border-radius: 8px; padding: 10px 18px; margin-bottom: 16px; font-family: 'Oswald', sans-serif; color: var(--or); letter-spacing: 2px; font-size: .9rem; }
+.modal-msg   { color: #888; font-size: .9rem; line-height: 1.7; margin-bottom: 24px; }
+.modal-btns  { display: flex; gap: 10px; }
+.modal-btn-main { flex: 1; padding: 13px; background: var(--or); border: none; color: var(--w); font-family: 'Bebas Neue', cursive; font-size: 1.05rem; letter-spacing: 2px; border-radius: 8px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.modal-btn-main:hover { background: var(--dor); }
+.modal-btn-sec  { flex: 1; padding: 13px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15); color: #aaa; font-family: 'Bebas Neue', cursive; font-size: 1.05rem; letter-spacing: 2px; border-radius: 8px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.modal-btn-sec:hover { background: rgba(255,255,255,.12); color: var(--w); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--dark); border: 2px solid var(--or);
+  color: var(--w); font-family: 'Oswald', sans-serif; font-size: .82rem; letter-spacing: 1px;
+  padding: 10px 20px; border-radius: 8px;
+  opacity: 0; transform: translateX(30px);
+  transition: all .28s; pointer-events: none;
+  max-width: calc(100vw - 40px);
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 780px) {
+  .layout { grid-template-columns: 1fr; }
+  .summary-col { order: -1; }   /* summary on top on mobile */
+}
+@media (max-width: 480px) {
+  .page { padding: 20px 14px 50px; }
+  .cart-items { padding: 0 14px; }
+  .cart-section-head { padding: 14px; }
+  .add-more-row { padding: 14px; }
+  .summary-rows, .checkout-form { padding: 14px; }
+  .modal-btns { flex-direction: column; }
+  .ci-thumb { width: 52px; height: 52px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Chatpata <span>Corner</span></a>
+  <div class="nav-right">
+    <a href="menu.html" class="nav-back">
+      &#8592; Back to Menu
+    </a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="page-header">
+    <div class="page-title">Your <span>Cart</span></div>
+    <div class="page-sub" id="pageSubtitle">Loading...</div>
+  </div>
+
+  <div class="layout" id="mainLayout">
+
+    <!-- ── LEFT: CART ITEMS ── -->
+    <div>
+      <div class="cart-section" id="cartSection">
+
+        <div class="cart-section-head">
+          <div class="cart-section-title">Order Items</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="cart-count-tag" id="itemCountTag">0 items</span>
+            <button class="clear-link" onclick="clearCart()">Clear all</button>
+          </div>
+        </div>
+
+        <!-- empty state -->
+        <div class="cart-empty" id="cartEmptyState">
+          <span class="cart-empty-icon">&#128722;</span>
+          <div class="cart-empty-title">Your cart is empty</div>
+          <div class="cart-empty-sub">Add some delicious items to get started</div>
+          <a href="menu.html" class="btn-back-menu">Browse Menu</a>
+        </div>
+
+        <!-- item rows rendered here -->
+        <div class="cart-items" id="cartItemsList"></div>
+
+        <div class="add-more-row" id="addMoreRow" style="display:none">
+          <a href="menu.html" class="add-more-link">&#43; Add more items</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── RIGHT: SUMMARY + CHECKOUT ── -->
+    <div class="summary-col" id="summaryCol">
+
+      <!-- Price breakdown -->
+      <div class="summary-card">
+        <div class="summary-head"><div class="summary-head-title">Price Summary</div></div>
+        <div class="summary-rows">
+          <div class="sum-row"><span class="sum-label">Subtotal</span><span class="sum-val" id="sumSubtotal">Rs 0</span></div>
+          <div class="sum-row"><span class="sum-label">Delivery Fee</span><span class="sum-val" id="sumDelivery">Rs 100</span></div>
+          <hr class="sum-divider">
+          <div class="grand-row">
+            <span class="grand-label">Total</span>
+            <span class="grand-val"  id="sumTotal">Rs 100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout form -->
+      <div class="checkout-card">
+        <div class="checkout-head">
+          <div class="checkout-head-title">Delivery Details</div>
+          <div class="checkout-head-sub">Fill in your info to place the order</div>
+        </div>
+        <div class="checkout-form">
+
+          <div class="fg">
+            <label>Your Name *</label>
+            <input type="text" id="fName" placeholder="e.g. Ahmed Khan" autocomplete="name">
+          </div>
+
+          <div class="fg">
+            <label>Phone Number *</label>
+            <input type="tel" id="fPhone" placeholder="03XX-XXXXXXX" autocomplete="tel">
+          </div>
+
+          <div class="fg">
+            <label>Order Type</label>
+            <div class="type-pills">
+              <div class="type-pill selected" id="pill-delivery" onclick="selectType('delivery')">&#128652; Home Delivery</div>
+              <div class="type-pill"          id="pill-pickup"   onclick="selectType('pickup')">&#127959; Self Pickup</div>
+            </div>
+          </div>
+
+          <div class="fg" id="addrGroup">
+            <label>Delivery Address *</label>
+            <textarea id="fAddr" placeholder="House no, Street, Area, City..." autocomplete="street-address"></textarea>
+          </div>
+
+          <div class="fg">
+            <label>Special Instructions</label>
+            <textarea id="fNotes" placeholder="Extra spicy? No onions? Less oil? Let us know..." style="min-height:60px"></textarea>
+          </div>
+
+          <button class="place-btn" id="placeBtn" onclick="placeOrder()">Place Order</button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-bg" id="successModal">
+  <div class="modal-box">
+    <span class="modal-icon">&#10003;</span>
+    <div class="modal-title">Order Placed!</div>
+    <div class="modal-id" id="modalOrderId">Order #CC-000000</div>
+    <div class="modal-msg">
+      Your order has been received.<br>
+      We will confirm via phone shortly.<br>
+      Estimated delivery: <strong style="color:var(--or)">45 – 60 minutes</strong>.
+    </div>
+    <div class="modal-btns">
+      <a href="menu.html" class="modal-btn-sec">Order More</a>
+      <a href="index.html" class="modal-btn-main">Done</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ────────────────────────────────
+   CART STORE  (same key as menu.html)
+──────────────────────────────── */
+const CS = {
+  KEY: 'cc_cart',
+  get()    { try { return JSON.parse(localStorage.getItem(this.KEY)) || {}; } catch { return {}; } },
+  save(c)  { try { localStorage.setItem(this.KEY, JSON.stringify(c)); } catch {} },
+  clear()  { this.save({}); },
+  inc(id)  { const c = this.get(); if (c[id]) { c[id].qty++; this.save(c); } },
+  dec(id)  { const c = this.get(); if (!c[id]) return; c[id].qty--; if (c[id].qty <= 0) delete c[id]; this.save(c); },
+  remove(id){ const c = this.get(); delete c[id]; this.save(c); },
+  subtotal(){ return Object.values(this.get()).reduce((s,i) => s + i.price * i.qty, 0); },
+  count()  { return Object.values(this.get()).reduce((s,i) => s + i.qty, 0); },
+};
+
+/* ────────────────────────────────
+   SVG PLACEHOLDER
+──────────────────────────────── */
+const PH = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="16" width="48" height="36" rx="4" stroke="#8B6343" stroke-width="2"/>
+  <circle cx="22" cy="28" r="5" stroke="#8B6343" stroke-width="2"/>
+  <path d="M8 40 L20 30 L30 40 L40 26 L56 40" stroke="#8B6343" stroke-width="2" stroke-linejoin="round" fill="none"/>
+</svg>`;
+
+/* ────────────────────────────────
+   RENDER CART
+──────────────────────────────── */
+function renderCart() {
+  const cart  = CS.get();
+  const keys  = Object.keys(cart);
+  const count = CS.count();
+  const sub   = CS.subtotal();
+  const delivery = 100;
+  const total = sub + delivery;
+
+  // subtitle
+  document.getElementById('pageSubtitle').textContent =
+    count === 0 ? 'Your cart is empty' :
+    count === 1 ? '1 item in your cart' :
+    count + ' items in your cart';
+
+  // count tag
+  document.getElementById('itemCountTag').textContent =
+    count === 1 ? '1 item' : count + ' items';
+
+  // totals
+  document.getElementById('sumSubtotal').textContent = 'Rs ' + sub.toLocaleString();
+  document.getElementById('sumDelivery').textContent = sub === 0 ? '–' : 'Rs ' + delivery.toLocaleString();
+  document.getElementById('sumTotal').textContent    = sub === 0 ? 'Rs 0' : 'Rs ' + total.toLocaleString();
+
+  const emptyState = document.getElementById('cartEmptyState');
+  const itemsList  = document.getElementById('cartItemsList');
+  const addMoreRow = document.getElementById('addMoreRow');
+  const placeBtn   = document.getElementById('placeBtn');
+  const summaryCol = document.getElementById('summaryCol');
+
+  if (keys.length === 0) {
+    emptyState.style.display  = 'block';
+    itemsList.style.display   = 'none';
+    addMoreRow.style.display  = 'none';
+    summaryCol.style.display  = 'none';
+    placeBtn.disabled         = true;
+    return;
+  }
+
+  emptyState.style.display  = 'none';
+  itemsList.style.display   = 'block';
+  addMoreRow.style.display  = 'block';
+  summaryCol.style.display  = 'flex';
+  placeBtn.disabled         = false;
+
+  // build rows
+  itemsList.innerHTML = keys.map(id => {
+    const item = cart[id];
+    const lineTotal = item.price * item.qty;
+    return `
+    <div class="cart-item" id="row_${id}">
+      <div class="ci-thumb">${PH}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        ${item.note ? `<div class="ci-sub">${item.note}</div>` : ''}
+        <div class="ci-unit">Rs ${item.price.toLocaleString()} each</div>
+      </div>
+      <div class="ci-right">
+        <div class="ci-total">Rs ${lineTotal.toLocaleString()}</div>
+        <div class="qty-box">
+          <button class="q-btn" data-action="dec" data-id="${id}">&#8722;</button>
+          <span class="q-val">${item.qty}</span>
+          <button class="q-btn" data-action="inc" data-id="${id}">&#43;</button>
+        </div>
+        <button class="remove-btn" data-action="remove" data-id="${id}" title="Remove">&#10005; Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // attach events via delegation
+  itemsList.onclick = function(e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id     = btn.dataset.id;
+    const action = btn.dataset.action;
+    if (action === 'inc')    CS.inc(id);
+    if (action === 'dec')    CS.dec(id);
+    if (action === 'remove') CS.remove(id);
+    renderCart();
+  };
+}
+
+/* ────────────────────────────────
+   ORDER TYPE TOGGLE
+──────────────────────────────── */
+let orderType = 'delivery';
+
+function selectType(type) {
+  orderType = type;
+  document.getElementById('pill-delivery').classList.toggle('selected', type === 'delivery');
+  document.getElementById('pill-pickup').classList.toggle('selected',  type === 'pickup');
+  document.getElementById('addrGroup').style.display = type === 'delivery' ? 'block' : 'none';
+}
+
+/* ────────────────────────────────
+   CLEAR CART
+──────────────────────────────── */
+function clearCart() {
+  if (!Object.keys(CS.get()).length) return;
+  if (!confirm('Remove all items from your cart?')) return;
+  CS.clear();
+  renderCart();
+}
+
+/* ────────────────────────────────
+   PLACE ORDER
+──────────────────────────────── */
+function placeOrder() {
+  const cart = CS.get();
+  if (!Object.keys(cart).length) { showToast('Your cart is empty'); return; }
+
+  const name  = document.getElementById('fName').value.trim();
+  const phone = document.getElementById('fPhone').value.trim();
+  const addr  = document.getElementById('fAddr').value.trim();
+  const notes = document.getElementById('fNotes').value.trim();
+
+  if (!name)  { showToast('Please enter your name'); document.getElementById('fName').focus(); return; }
+  if (!phone) { showToast('Please enter your phone number'); document.getElementById('fPhone').focus(); return; }
+  if (orderType === 'delivery' && !addr) {
+    showToast('Please enter your delivery address');
+    document.getElementById('fAddr').focus(); return;
+  }
+
+  const sub   = CS.subtotal();
+  const total = sub + 100;
+  const orderId = 'CC-' + Date.now().toString().slice(-6);
+
+  const order = {
+    id:       orderId,
+    name:     name,
+    phone:    phone,
+    type:     orderType,
+    addr:     addr,
+    notes:    notes,
+    items:    Object.values(cart).map(i => ({ name: i.name, price: i.price, qty: i.qty, note: i.note })),
+    subtotal: sub,
+    total:    total,
+    status:   'new',
+    ts:       new Date().toISOString(),
+  };
+
+  // save to localStorage orders list
+  try {
+    const orders = JSON.parse(localStorage.getItem('cc_orders') || '[]');
+    orders.unshift(order);
+    localStorage.setItem('cc_orders', JSON.stringify(orders));
+  } catch(e) {}
+
+  // clear cart
+  CS.clear();
+
+  // show success modal
+  document.getElementById('modalOrderId').textContent = 'Order #' + orderId;
+  document.getElementById('successModal').classList.add('show');
+}
+
+/* ────────────────────────────────
+   TOAST
+──────────────────────────────── */
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ────────────────────────────────
+   INIT
+──────────────────────────────── */
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+// close modal on overlay click
+document.getElementById('successModal').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('show');
+});
+
+renderCart();
+</script>
+</body>
+</html>
